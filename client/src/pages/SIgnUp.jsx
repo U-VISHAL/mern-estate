@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { Link,useNavigate } from 'react-router-dom';
 
 function SignUp() {
-  const [formData,setFormdata]= useState({})
-  const [error,setError] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [formData,setFormdata]= useState({});
+  const [error,setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -15,8 +15,8 @@ function SignUp() {
   };
 
   const handleSubmit = async (e) =>{
+    e.preventDefault();
     try {
-      e.preventDefault();
       setLoading(true);
       const res = await fetch('/api/auth/signup',
         {
@@ -27,11 +27,12 @@ function SignUp() {
           body:JSON.stringify(formData),
         });
         const data = await res.json();
-        if(data.success === falsee){
-        setError(data.message);
-        setLoading(false);
-        return;
-      }
+        if(data.success === false)
+        {
+          setError(data.message);
+          setLoading(false);
+          return;
+        }
       setLoading(false);
       setError(null);
       navigate('/sign-in')
@@ -40,7 +41,7 @@ function SignUp() {
       setLoading(false);
       setError(error.message);
     }
-      }
+    }
       
 
 return (
@@ -58,6 +59,7 @@ return (
         <span className='text-blue-700'>Sign In</span>
         </Link>
       </div>
+      {error && <p className='text-red-500 mt-5'>{error}</p> }
     </div>
   )
 }
